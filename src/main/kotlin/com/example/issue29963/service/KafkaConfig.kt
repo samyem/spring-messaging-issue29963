@@ -17,12 +17,13 @@ import org.springframework.kafka.core.ProducerFactory
 @EnableKafka
 @Configuration
 class KafkaConfig {
-    private val embeddedKafka = "localhost:9092"
+    // Assuming kafka running locally on 9092
+    private val localKafka = "localhost:9092"
 
     @Bean
     fun producerFactory(): ProducerFactory<String, String> {
         val configProps: MutableMap<String, Any> = HashMap()
-        configProps[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = embeddedKafka
+        configProps[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = localKafka
         configProps[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         configProps[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         return DefaultKafkaProducerFactory(configProps)
@@ -31,7 +32,7 @@ class KafkaConfig {
     @Bean
     fun consumerFactory(): ConsumerFactory<String, String> {
         val props: MutableMap<String, Any> = HashMap()
-        props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = embeddedKafka
+        props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = localKafka
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[ConsumerConfig.MAX_POLL_RECORDS_CONFIG] = "10"
